@@ -1,0 +1,18 @@
+<%
+f = taglib("/lib/form")
+f.entry(:title => 'enabled', :field => 'enabled', :description => "enable/disable this action") do
+  f.checkbox
+end
+f.entry(:title => 'distributive url', :field => 'distro_url', :description => "url to distributive") do
+  f.textbox
+end
+f.entry(:title => 'ssh host', :field => 'ssh_host', :description => "remote host") do
+  f.textbox
+end
+f.entry(:title => 'ssh login', :field => 'ssh_login', :description => "ssh login") do
+  f.textbox
+end
+f.entry(:title => 'scripts', :field => 'scripts', :description => "scripts") do
+  f.textarea
+end
+%>
