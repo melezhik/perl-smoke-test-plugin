@@ -1,12 +1,11 @@
-require "versionomy"
-
 ###
     
 class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
 
     attr_accessor :enabled, :distro_url
-    attr_accessor :scripts
+    attr_accessor :paths
     attr_accessor :ssh_host, :ssh_login
+    attr_accessor :verbosity_type, :catalyst_debug
 
     display_name "Run Smoke Tests on Perl Application" 
 
@@ -16,9 +15,11 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         @attrs = attrs
         @enabled = attrs["enabled"]
         @distro_url = attrs["distro_url"]
-        @paths = attrs["scripts"] || ""
+        @paths = attrs["paths"] || ""
         @ssh_host = attrs["ssh_host"]
         @ssh_login = attrs["ssh_login"]
+        @verbosity_type = attrs["verbosity_type"]
+        @catalyst_debug = attrs["catalyst_debug"]
 
     end
 
@@ -49,43 +50,70 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
 
             listener.info "running smoke tests on remote host: #{@ssh_host}"
 
-            listener.info "download distributive #{distro_url}"
-            cmd = []
-            cmd << "export LC_ALL=#{env['LC_ALL']}" unless ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
-            cmd << "ssh #{@ssh_login}@#{@ssh_host}"
-            cmd << "rm -rf .perl_smoke_test/"
-            cmd << "mkdir .perl_smoke_test/"
-            cmd << "cd .perl_smoke_test/"
-            cmd << "wget #{@distro_url}"
-            listener.info "ssh command: #{cmd.join(' && ')}"
-            build.abort unless launcher.execute("bash", "-c", cmd.join(' && '), { :out => listener } ) == 0
-
-            listener.info "unpack distributive"
-            cmd = []
             dist_name = @distro_url.split('/').last
             dist_dir = dist_name.sub('.tar.gz','')
+
+            listener.info "download distributive #{distro_url}"
             listener.info "distro_url: #{@distro_url}"
             listener.info "dist_name: #{dist_name}"
             listener.info "dist_dir: #{dist_dir}"
-            cmd << "export LC_ALL=#{env['LC_ALL']}" unless ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
-            cmd << "ssh #{@ssh_login}@#{@ssh_host}"
+
+            if ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
+                ssh_cmd = "ssh #{@ssh_login}@#{@ssh_host}"
+            else
+                ssh_cmd = "export LC_ALL=#{env['LC_ALL']} ssh #{@ssh_login}@#{@ssh_host}"
+            end
+
+            cmd = []
+            cmd << "rm -rf .perl_smoke_test/"
+            cmd << "mkdir .perl_smoke_test/"
+            cmd << "cd .perl_smoke_test/"
+            cmd << "curl -f #{@distro_url} -o #{dist_name}"
+            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+
+            listener.info "unpack distributive"
+            cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "tar -xzf #{dist_name}"
             cmd << "cd #{dist_dir}"
-            build.abort unless launcher.execute("bash", "-c", cmd.join(' && '), { :out => listener } ) == 0
+            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
             listener.info "run application tests"
             cmd = []
-            cmd << "export LC_ALL=#{env['LC_ALL']}" unless ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
-            cmd << "export PERL5LIB=#{env['PERL5LIB']}" unless ( env['PERL5LIB'].nil? || env['PERL5LIB'].empty? )
-            cmd << "ssh #{@ssh_login}@#{@ssh_host}"
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
-            cmd << "eval $(perl -Mlocal::lib=./cpanlib)"
+            if ( env['PERL5LIB'].nil? || env['PERL5LIB'].empty? )
+                cmd << "export PERL5LIB=./cpanlib/lib/perl5" 
+            else
+                cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
+            end
             cmd << "perl Build.PL"
             cmd << "./Build"
-            cmd << "./Build test"
-            build.abort unless launcher.execute("bash", "-c", cmd.join(' && '), { :out => listener } ) == 0
+            test_verbose = ''
+            catalyst_debug = '0'
+            test_verbose = '--verbose=1' if @verbosity_type == 'high'
+            catalyst_debug = '1' if @catalyst_debug == true
+            cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
+            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+
+            # check paths
+            @paths.split("\n").map {|l| l.chomp }.reject {|l| l.nil? || l.empty? || l =~ /^\s+#/ || l =~ /^#/ }.map{ |l| l.sub(/#.*/){""} }.each do |l|
+                cmd = []
+                cmd << "cd .perl_smoke_test/"
+                cmd << "cd #{dist_dir}"
+                if ( env['PERL5LIB'].nil? || env['PERL5LIB'].empty? )
+                    cmd << "export PERL5LIB=./cpanlib/lib/perl5" 
+                else
+                    cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
+                end
+                cmd << "perl -c #{l}"
+                listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+                build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+            end  
+
 
         end # if @enabled == true
 

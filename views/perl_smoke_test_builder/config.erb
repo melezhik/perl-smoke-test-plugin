@@ -1,5 +1,13 @@
 <%
 f = taglib("/lib/form")
+builder = it.getBuilders.select {|b| b.get('class').to_s == 'PerlSmokeTestBuilder' }.first
+if builder.nil? # first time usage of plugin in project
+    verbosity_type = 'none'
+    f.readOnlyTextbox(:value => 'welcome to the PerlSmokeTestBuilder, I see you use the plugin in the project for the first time')
+else
+    verbosity_type = builder.get('verbosity_type')
+end 
+
 f.entry(:title => 'enabled', :field => 'enabled', :description => "enable/disable this action") do
   f.checkbox
 end
@@ -12,7 +20,16 @@ end
 f.entry(:title => 'ssh login', :field => 'ssh_login', :description => "ssh login") do
   f.textbox
 end
-f.entry(:title => 'scripts', :field => 'scripts', :description => "scripts") do
+f.entry(:title => 'paths', :field => 'paths', :description => "scripts to check") do
   f.textarea
 end
+f.entry(:title => 'enable catalyst debug mode', :field => 'catalyst_debug', :description => "run catalyst tests in debug mode") do
+  f.checkbox
+end
+f.entry(:title => 'verbosity type', :field => 'verbosity_type', :description => "type of verbosity") do
+    f.radio(:name => 'verbosity_type', :value=>'none', :checked => verbosity_type == 'none' ? true : false, :title => 'None' )
+    f.radio(:name => 'verbosity_type', :value=>'medium', :checked => verbosity_type == 'medium' ? true : false, :title => 'Medium' )
+    f.radio(:name => 'verbosity_type', :value=>'high', :checked => verbosity_type == 'high' ? true : false, :title => 'High' )
+end
+
 %>
