@@ -80,6 +80,22 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
+            listener.info "check prerequisitives"
+            cmd = []
+            cmd << "cd .perl_smoke_test/"
+            cmd << "cd #{dist_dir}"
+            if ( env['PERL5LIB'].nil? || env['PERL5LIB'].empty? )
+                cmd << "export PERL5LIB=./cpanlib/lib/perl5" 
+            else
+                cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
+            end
+            cmd << "perl Build.PL"
+            cmd << "./Build"
+            cmd << "./Build prereq_report > report.txt"
+            cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
+            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+
             listener.info "run application tests"
             cmd = []
             cmd << "cd .perl_smoke_test/"
@@ -98,6 +114,8 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
             listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+
+
 
             # check paths
             @paths.split("\n").map {|l| l.chomp }.reject {|l| l.nil? || l.empty? || l =~ /^\s+#/ || l =~ /^#/ }.map{ |l| l.sub(/#.*/){""} }.each do |l|
