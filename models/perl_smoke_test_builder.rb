@@ -1,8 +1,8 @@
 ###
-    
+require 'open-uri'
 class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
 
-    attr_accessor :enabled, :distro_url
+    attr_accessor :enabled, :distro_url, :redirect_url
     attr_accessor :paths
     attr_accessor :ssh_host, :ssh_login
     attr_accessor :verbosity_type, :catalyst_debug
@@ -15,6 +15,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         @attrs = attrs
         @enabled = attrs["enabled"]
         @distro_url = attrs["distro_url"]
+        @redirect_url = attrs["redirect_url"]
         @paths = attrs["paths"] || ""
         @ssh_host = attrs["ssh_host"]
         @ssh_login = attrs["ssh_login"]
@@ -50,7 +51,15 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
 
             listener.info "running smoke tests on remote host: #{@ssh_host}"
 
-            dist_name = @distro_url.split('/').last
+            if @redirect_url == true
+                listener.info "getting real url from: #{@distro_url}"
+                distro_url = URI.parse(@distro_url).read
+            else
+                distro_url = @distro_url
+                listener.info "real url as is: #{@distro_url}"
+            end
+
+            dist_name = distro_url.split('/').last
             dist_dir = dist_name.sub('.tar.gz','')
 
             listener.info "download distributive #{distro_url}"
@@ -61,14 +70,15 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             if ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
                 ssh_cmd = "ssh #{@ssh_login}@#{@ssh_host}"
             else
-                ssh_cmd = "export LC_ALL=#{env['LC_ALL']} ssh #{@ssh_login}@#{@ssh_host}"
+                ssh_cmd = "export LC_ALL=#{env['LC_ALL']} && ssh #{@ssh_login}@#{@ssh_host}"
             end
+
 
             cmd = []
             cmd << "rm -rf .perl_smoke_test/"
             cmd << "mkdir .perl_smoke_test/"
             cmd << "cd .perl_smoke_test/"
-            cmd << "curl -f #{@distro_url} -o #{dist_name}"
+            cmd << "curl -f #{distro_url} -o #{dist_name}"
             listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 

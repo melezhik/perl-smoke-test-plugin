@@ -14,6 +14,9 @@ end
 f.entry(:title => 'distributive url', :field => 'distro_url', :description => "url to distributive") do
   f.textbox
 end
+f.entry(:title => 'redirect url', :field => 'redirect_url', :description => "this url contains redirect to another url") do
+  f.checkbox
+end
 f.entry(:title => 'ssh host', :field => 'ssh_host', :description => "remote host") do
   f.textbox
 end
