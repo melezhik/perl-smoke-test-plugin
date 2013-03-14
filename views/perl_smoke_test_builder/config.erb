@@ -29,6 +29,9 @@ end
 f.entry(:title => 'enable catalyst debug mode', :field => 'catalyst_debug', :description => "run catalyst tests in debug mode") do
   f.checkbox
 end
+f.entry(:title => 'enable/disable color output', :field => 'color_output', :description => "enable/disable color output") do
+  f.checkbox
+end
 f.entry(:title => 'verbosity type', :field => 'verbosity_type', :description => "type of verbosity") do
     f.radio(:name => 'verbosity_type', :value=>'none', :checked => verbosity_type == 'none' ? true : false, :title => 'None' )
     f.radio(:name => 'verbosity_type', :value=>'medium', :checked => verbosity_type == 'medium' ? true : false, :title => 'Medium' )
