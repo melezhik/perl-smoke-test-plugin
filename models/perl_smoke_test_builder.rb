@@ -50,8 +50,6 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         # start smoke tests
         if @enabled == true 
 
-            listener.info sc.info(@ssh_host, :title => 'running smoke tests on remote host')
-
             if @redirect_url == true
                 listener.info sc.info(@distro_url, :title => 'redirect url')
                 distro_url = URI.parse(@distro_url).read.chomp
@@ -72,24 +70,25 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
                 ssh_cmd = "export LC_ALL=#{env['LC_ALL']} && ssh #{@ssh_login}@#{@ssh_host}"
             end
 
-
+            listener.info sc.info('upload distributive to host',:title => 'stage')
+            listener.info sc.info(@ssh_host, :title => 'ssh host')
+            curl_verbosity = @verbose_output == true ? '--verbose' : '-s'
+            
             cmd = []
             cmd << "rm -rf .perl_smoke_test/"
             cmd << "mkdir .perl_smoke_test/"
             cmd << "cd .perl_smoke_test/"
-            cmd << "curl -f #{distro_url} -o #{dist_name}"
-            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
+            cmd << "curl -f #{distro_url} -o #{dist_name} #{curl_verbosity}"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info sc.info('unpack distributive')
+            listener.info sc.info('unpack distributive',:title => 'stage')
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "tar -xzf #{dist_name}"
             cmd << "cd #{dist_dir}"
-            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info sc.info("check prerequisitives")
+            listener.info sc.info("check prerequisitives",:title => 'stage')
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -102,10 +101,9 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "./Build"
             cmd << "./Build prereq_report > report.txt"
             cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
-            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info sc.info("run application tests")
+            listener.info sc.info("run application tests",:title => 'stage')
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -121,12 +119,12 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             test_verbose = @verbose_output == true ? '--verbose=1' : ''
             catalyst_debug = '1' if @catalyst_debug == true
             cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
-            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
 
 
             # check paths
+            listener.info sc.info("check perl scripts",:title => 'stage')
             @paths.split("\n").map {|l| l.chomp }.reject {|l| l.nil? || l.empty? || l =~ /^\s+#/ || l =~ /^#/ }.map{ |l| l.sub(/#.*/){""} }.each do |l|
                 cmd = []
                 cmd << "cd .perl_smoke_test/"
@@ -137,7 +135,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
                     cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
                 end
                 cmd << "perl -c #{l}"
-                listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
+                listener.info sc.info(l,:title => 'check')
                 build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
             end  
 
