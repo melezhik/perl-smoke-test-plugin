@@ -6,7 +6,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
     attr_accessor :enabled, :distro_url, :redirect_url
     attr_accessor :paths
     attr_accessor :ssh_host, :ssh_login
-    attr_accessor :verbosity_type, :catalyst_debug
+    attr_accessor :verbose_output, :catalyst_debug, :color_output
 
     display_name "Run Smoke Tests on Perl Application" 
 
@@ -20,7 +20,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         @paths = attrs["paths"] || ""
         @ssh_host = attrs["ssh_host"]
         @ssh_login = attrs["ssh_login"]
-        @verbosity_type = attrs["verbosity_type"]
+        @verbose_output = attrs["verbose_output"]
         @catalyst_debug = attrs["catalyst_debug"]
         @color_output = attrs['color_output']
     end
@@ -53,18 +53,16 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             listener.info sc.info(@ssh_host, :title => 'running smoke tests on remote host')
 
             if @redirect_url == true
-                listener.info sc.info(@distro_url, :title => 'getting real url from')
-                distro_url = URI.parse(@distro_url).read
+                listener.info sc.info(@distro_url, :title => 'redirect url')
+                distro_url = URI.parse(@distro_url).read.chomp
             else
                 distro_url = @distro_url
-                listener.info sc.info(@distro_url, :title => 'real url as is')
             end
 
             dist_name = distro_url.split('/').last
             dist_dir = dist_name.sub('.tar.gz','')
 
-            listener.info sc.info(distro_url, :title => 'download distributive')
-            listener.info sc.info(@distro_url, :title => 'distro_url')
+            listener.info sc.info(distro_url, :title => 'distro_url')
             listener.info sc.info(dist_name, :title => 'dist_name')
             listener.info sc.info(dist_dir, :title => 'dist_dir')
 
@@ -120,10 +118,10 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "./Build"
             test_verbose = ''
             catalyst_debug = '0'
-            test_verbose = '--verbose=1' if @verbosity_type == 'high'
+            test_verbose = @verbose_output == true ? '--verbose=1' : ''
             catalyst_debug = '1' if @catalyst_debug == true
             cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
-            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
 
