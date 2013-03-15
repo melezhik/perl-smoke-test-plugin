@@ -1,11 +1,12 @@
-###
 require 'open-uri'
+require 'simple/console'
+
 class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
 
     attr_accessor :enabled, :distro_url, :redirect_url
     attr_accessor :paths
     attr_accessor :ssh_host, :ssh_login
-    attr_accessor :verbosity_type, :catalyst_debug
+    attr_accessor :verbose_output, :catalyst_debug, :color_output
 
     display_name "Run Smoke Tests on Perl Application" 
 
@@ -19,9 +20,9 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         @paths = attrs["paths"] || ""
         @ssh_host = attrs["ssh_host"]
         @ssh_login = attrs["ssh_login"]
-        @verbosity_type = attrs["verbosity_type"]
+        @verbose_output = attrs["verbose_output"]
         @catalyst_debug = attrs["catalyst_debug"]
-
+        @color_output = attrs['color_output']
     end
 
     ##
@@ -42,30 +43,28 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
     def perform(build, launcher, listener)
 
       # actually perform the build step
-
+        sc  = Simple::Console.new(:color_output => @color_output)
         env = build.native.getEnvironment()
         job = build.send(:native).get_project.name
 
         # start smoke tests
         if @enabled == true 
 
-            listener.info "running smoke tests on remote host: #{@ssh_host}"
+            listener.info sc.info(@ssh_host, :title => 'running smoke tests on remote host')
 
             if @redirect_url == true
-                listener.info "getting real url from: #{@distro_url}"
-                distro_url = URI.parse(@distro_url).read
+                listener.info sc.info(@distro_url, :title => 'redirect url')
+                distro_url = URI.parse(@distro_url).read.chomp
             else
                 distro_url = @distro_url
-                listener.info "real url as is: #{@distro_url}"
             end
 
             dist_name = distro_url.split('/').last
             dist_dir = dist_name.sub('.tar.gz','')
 
-            listener.info "download distributive #{distro_url}"
-            listener.info "distro_url: #{@distro_url}"
-            listener.info "dist_name: #{dist_name}"
-            listener.info "dist_dir: #{dist_dir}"
+            listener.info sc.info(distro_url, :title => 'distro_url')
+            listener.info sc.info(dist_name, :title => 'dist_name')
+            listener.info sc.info(dist_dir, :title => 'dist_dir')
 
             if ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
                 ssh_cmd = "ssh #{@ssh_login}@#{@ssh_host}"
@@ -79,18 +78,18 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "mkdir .perl_smoke_test/"
             cmd << "cd .perl_smoke_test/"
             cmd << "curl -f #{distro_url} -o #{dist_name}"
-            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info "unpack distributive"
+            listener.info sc.info('unpack distributive')
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "tar -xzf #{dist_name}"
             cmd << "cd #{dist_dir}"
-            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info "check prerequisitives"
+            listener.info sc.info("check prerequisitives")
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -103,10 +102,10 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "./Build"
             cmd << "./Build prereq_report > report.txt"
             cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
-            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
-            listener.info "run application tests"
+            listener.info sc.info("run application tests")
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -119,10 +118,10 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "./Build"
             test_verbose = ''
             catalyst_debug = '0'
-            test_verbose = '--verbose=1' if @verbosity_type == 'high'
+            test_verbose = @verbose_output == true ? '--verbose=1' : ''
             catalyst_debug = '1' if @catalyst_debug == true
             cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
-            listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+            listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
 
@@ -138,7 +137,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
                     cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
                 end
                 cmd << "perl -c #{l}"
-                listener.info "ssh command: #{ssh_cmd} '#{cmd.join(' && ')}'"
+                listener.info sc.info("#{ssh_cmd} '#{cmd.join(' && ')}'", :title => 'ssh command')
                 build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
             end  
 
