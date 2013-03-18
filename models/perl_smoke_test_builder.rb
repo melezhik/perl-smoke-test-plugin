@@ -78,7 +78,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "rm -rf .perl_smoke_test/"
             cmd << "mkdir .perl_smoke_test/"
             cmd << "cd .perl_smoke_test/"
-            cmd << "curl -f #{distro_url} -o #{dist_name} #{curl_verbosity}"
+            cmd << "curl -L -f #{distro_url} -o #{dist_name} #{curl_verbosity}"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
             listener.info sc.info('unpack distributive',:title => 'stage')
@@ -97,13 +97,25 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             else
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
             end
-            cmd << "perl Build.PL"
-            cmd << "./Build"
-            cmd << "./Build prereq_report > report.txt"
-            cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
+
+            if  File.exist?("#{dist_dir}/Build.PL")
+                cmd << "perl Build.PL"
+                cmd << "./Build"
+                cmd << "./Build prereq_report > report.txt"
+                cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
+            elsif File.exist?("#{dist_dir}/Makefile.PL")
+                cmd << "perl Makefile.PL"
+                cmd << "make"
+            end
+            
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
             listener.info sc.info("run application tests",:title => 'stage')
+            test_verbose = ''
+            catalyst_debug = '0'
+            test_verbose = @verbose_output == true ? '--verbose=1' : ''
+            catalyst_debug = '1' if @catalyst_debug == true
+
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -112,15 +124,16 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             else
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
             end
-            cmd << "perl Build.PL"
-            cmd << "./Build"
-            test_verbose = ''
-            catalyst_debug = '0'
-            test_verbose = @verbose_output == true ? '--verbose=1' : ''
-            catalyst_debug = '1' if @catalyst_debug == true
-            cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
-            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
+            if  File.exist?("#{dist_dir}/Build.PL")
+                cmd << "perl Build.PL"
+                cmd << "./Build"
+                cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
+            elsif File.exist?("#{dist_dir}/Makefile.PL")
+                cmd << "make test"
+            end
+
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
 
             # check paths
