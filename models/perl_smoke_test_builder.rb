@@ -118,8 +118,8 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             else
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
             end            
-            cmd << "if test -e Build.PL; then ./Build && CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}; fi"
-            cmd << "if test -e Makefile.PL; then perl Makefile.PL && make && make test; fi"
+            cmd << "if test -e Build.PL; then ./Build && CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose} && if [ `echo $?` -ne 0 ]; then exit 1;fi; fi"
+            cmd << "if test -e Makefile.PL; then perl Makefile.PL && make && make test && if [ `echo $?` -ne 0 ]; then exit 1;fi; fi"
 
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
