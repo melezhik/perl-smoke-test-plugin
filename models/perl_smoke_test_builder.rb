@@ -33,7 +33,6 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
     def prebuild(build, listener)
       # do any setup that needs to be done before this build runs.
     end
-
     ##
     # Runs the step over the given build and reports the progress to the listener.
     #
@@ -46,6 +45,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
         sc  = Simple::Console.new(:color_output => @color_output)
         env = build.native.getEnvironment()
         job = build.send(:native).get_project.name
+
 
         # start smoke tests
         if @enabled == true 
@@ -70,15 +70,16 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
                 ssh_cmd = "export LC_ALL=#{env['LC_ALL']} && ssh #{@ssh_login}@#{@ssh_host}"
             end
 
+            curl_verbosity = @verbose_output == true ? '--verbose' : '-s'
+
             listener.info sc.info('upload distributive to host',:title => 'stage')
             listener.info sc.info(@ssh_host, :title => 'ssh host')
-            curl_verbosity = @verbose_output == true ? '--verbose' : '-s'
-            
+
             cmd = []
             cmd << "rm -rf .perl_smoke_test/"
             cmd << "mkdir .perl_smoke_test/"
             cmd << "cd .perl_smoke_test/"
-            cmd << "curl -f #{distro_url} -o #{dist_name} #{curl_verbosity}"
+            cmd << "curl -L -f #{distro_url} -o #{dist_name} #{curl_verbosity}"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
             listener.info sc.info('unpack distributive',:title => 'stage')
@@ -87,6 +88,7 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             cmd << "tar -xzf #{dist_name}"
             cmd << "cd #{dist_dir}"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+
 
             listener.info sc.info("check prerequisitives",:title => 'stage')
             cmd = []
@@ -97,13 +99,17 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             else
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
             end
-            cmd << "perl Build.PL"
-            cmd << "./Build"
-            cmd << "./Build prereq_report > report.txt"
-            cmd << "cat report.txt; if grep '\\!' report.txt; then exit 1; fi"
+            cmd << "if test -e Build.PL; then perl Build.PL && ./Build && ./Build prereq_report > report.txt && cat report.txt && if grep '\\!' report.txt; then exit 1; fi; fi"
             build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
+
             listener.info sc.info("run application tests",:title => 'stage')
+            test_verbose = ''
+            catalyst_debug = '0'
+            test_verbose = @verbose_output == true ? '--verbose=1' : ''
+            makemaker_verbose = @verbose_output == true ? 'TEST_VERBOSE=1' : ''
+            catalyst_debug = '1' if @catalyst_debug == true
+
             cmd = []
             cmd << "cd .perl_smoke_test/"
             cmd << "cd #{dist_dir}"
@@ -111,16 +117,11 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5" 
             else
                 cmd << "export PERL5LIB=./cpanlib/lib/perl5:#{env['PERL5LIB']}" 
-            end
-            cmd << "perl Build.PL"
-            cmd << "./Build"
-            test_verbose = ''
-            catalyst_debug = '0'
-            test_verbose = @verbose_output == true ? '--verbose=1' : ''
-            catalyst_debug = '1' if @catalyst_debug == true
-            cmd << "CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}"
-            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
+            end            
+            cmd << "if test -e Build.PL; then ./Build && CATALYST_DEBUG=#{catalyst_debug} ./Build test #{test_verbose}; fi"
+            cmd << "if test -e Makefile.PL; then perl Makefile.PL && make && make test; fi"
 
+            build.abort unless launcher.execute("bash", "-c", "#{ssh_cmd} '#{cmd.join(' && ')}'", { :out => listener } ) == 0
 
 
             # check paths
