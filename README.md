@@ -23,6 +23,7 @@ run smoke tests against perl application distributive:
 - curl
 - perl
 
+# to-do list
 - support for ExtUtils::MakeMaker projects ( currently only Module::Build supported )
 
 
