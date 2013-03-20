@@ -3,7 +3,7 @@ run smoke tests against perl application distributive:
  - check if all dependencies are met
  - check compilation / syntax errors on given scripts
 
-# what it does:
+# what it does
 
  1) Connect to remote host with gien ssh login using ssh public-key authentication schema
  2) Upload distributive to host
