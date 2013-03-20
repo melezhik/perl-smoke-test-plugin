@@ -5,11 +5,13 @@ run smoke tests against perl application distributive:
 
 # what it does:
 
-1) Connect to remote host with gien ssh login using ssh public-key authentication schema
-2) Upload distributive to host
-3  Unpack it
-4) Run standard perl Build.PL/Makefile.PL cycle to execute unit tests and check prerequisites
-5) So - If anything goes wrong you know it in good time, before release is happened!
+ 1) Connect to remote host with gien ssh login using ssh public-key authentication schema
+ 2) Upload distributive to host
+ 3)  Unpack it
+ 4) Run standard perl Build.PL/Makefile.PL cycle to execute unit tests and check prerequisites
+ 5) So - If anything goes wrong you know it in good time, before release is happened!
+
+
 
 # plugin interface
  
