@@ -15,7 +15,17 @@
 <li>check compilation / syntax errors on given scripts</li>
 </ul>
 
-<p><img src='https://raw.github.com/melezhik/perl-smoke-test-plugin/master/images/layout.png' alt='layout' /></p>
+<h1 id='what_it_does'>what it does</h1>
+
+<p>1) Connect to remote host with gien ssh login using ssh public-key authentication schema 2) Upload distributive to host 3) Unpack it 4) Run standard perl Build.PL/Makefile.PL cycle to execute unit tests and check prerequisites 5) So - If anything goes wrong you know it in good time, before release is happened!</p>
+
+<h1 id='plugin_interface'>plugin interface</h1>
+
+<p><img alt='layout' src='https://raw.github.com/melezhik/perl-smoke-test-plugin/master/images/layout.png' /></p>
+
+<h1 id='download_link'>download link</h1>
+
+<p><a href='http://repo.jenkins-ci.org/snapshots/org/jenkins-ci/ruby-plugins/perl-smoke-test/'>http://repo.jenkins-ci.org/snapshots/org/jenkins-ci/ruby-plugins/perl-smoke-test/</a></p>
 
 <h1 id='prerequisites'>prerequisites</h1>
 
@@ -23,13 +33,11 @@
 <li>curl</li>
 
 <li>perl</li>
-
-<li>Module::Build</li>
 </ul>
 
-<h1 id='todo'>to-do</h1>
+<h1 id='todo_list'>to-do list</h1>
 
 <ul>
-<li>support for ExtUtils::MakeMaker projects ( currently only Module::Build supported)</li>
+<li>support for ExtUtils::MakeMaker projects ( currently only Module::Build supported )</li>
 </ul>
 </body></html>
