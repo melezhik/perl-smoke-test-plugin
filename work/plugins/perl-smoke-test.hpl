@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Created-By: 0.3.8
+Created-By: 0.4.0
 Build-Ruby-Platform: java
 Build-Ruby-Version: 1.9.3
 Built-By: melezhik
@@ -8,7 +8,7 @@ Short-Name: perl-smoke-test
 Long-Name: Perl Smoke Test Plugin
 Url: https://github.com/melezhik/perl-smoke-test-plugin
 Plugin-Class: ruby.RubyPlugin
-Plugin-Version: 0.0.1
+Plugin-Version: 0.0.2
 Jenkins-Version: 1.432
 Plugin-Dependencies: ruby-runtime:0.10
 Load-Path: /home/melezhik/.rvm/gems/jruby-1.7.3/gems/json-1.7.7-java/lib:/home/mele
