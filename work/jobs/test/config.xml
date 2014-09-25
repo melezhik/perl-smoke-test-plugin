@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <ruby-proxy-object>
+      <ruby-object ruby-class="Jenkins::Tasks::BuilderProxy" pluginid="perl-smoke-test">
+        <pluginid pluginid="perl-smoke-test" ruby-class="String">perl-smoke-test</pluginid>
+        <object ruby-class="PerlSmokeTestBuilder" pluginid="perl-smoke-test">
+          <redirect__url pluginid="perl-smoke-test" ruby-class="TrueClass">true</redirect__url>
+          <verbose__output reference="../redirect__url"/>
+          <enabled reference="../redirect__url"/>
+          <color__output reference="../redirect__url"/>
+          <distro__url pluginid="perl-smoke-test" ruby-class="String">http://buildbot.webdev.x:8080/job/recalc/lastSuccessfulBuild/artifact/build/distro.url</distro__url>
+          <ssh__login pluginid="perl-smoke-test" ruby-class="String">melezhik</ssh__login>
+          <ssh__host pluginid="perl-smoke-test" ruby-class="String">web3-tst3.webdev.x</ssh__host>
+          <paths pluginid="perl-smoke-test" ruby-class="String">cpanlib/bin/recalcX.pl
+cpanlib/bin/recalcX_tlog.pl
+</paths>
+          <catalyst__debug pluginid="perl-smoke-test" ruby-class="FalseClass">false</catalyst__debug>
+          <attrs pluginid="perl-smoke-test" ruby-class="Hash">
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">catalyst_debug</key>
+              <value reference="../../../catalyst__debug"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">color_output</key>
+              <value reference="../../../redirect__url"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">distro_url</key>
+              <value reference="../../../distro__url"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">enabled</key>
+              <value reference="../../../redirect__url"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">paths</key>
+              <value reference="../../../paths"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">redirect_url</key>
+              <value reference="../../../redirect__url"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">ssh_host</key>
+              <value reference="../../../ssh__host"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">ssh_login</key>
+              <value reference="../../../ssh__login"/>
+            </entry>
+            <entry>
+              <key pluginid="perl-smoke-test" ruby-class="String">verbose_output</key>
+              <value reference="../../../redirect__url"/>
+            </entry>
+          </attrs>
+        </object>
+      </ruby-object>
+    </ruby-proxy-object>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.3.1">
+      <colorMapName>vga</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+</project>

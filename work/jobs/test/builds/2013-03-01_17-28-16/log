@@ -1,0 +1,171 @@
+Started by user [8mha:AAAAlh+LCAAAAAAAAABb85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAzOEgYu/dLi1CL9vNKcHACFIKlWvwAAAA==[0manonymous
+Building in workspace /home/melezhik/GitHub/perl-smoke-test-plugin/work/jobs/test/workspace
+running smoke tests on remote host: web3-tst3.webdev.x
+download distributive http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+distro_url: http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+dist_name: Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+dist_dir: Adriver-GoodsBoomerang-BannerDelivery-v0.1.12
+ssh command: ssh melezhik@web3-tst3.webdev.x 'rm -rf .perl_smoke_test/ && mkdir .perl_smoke_test/ && cd .perl_smoke_test/ && curl -f http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz -o Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'rm -rf .perl_smoke_test/ && mkdir .perl_smoke_test/ && cd .perl_smoke_test/ && curl -f http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz -o Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz'"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  8 8051k    8  689k    0     0  36.9M      0 --:--:-- --:--:-- --:--:-- 39.6M100 8051k  100 8051k    0     0  74.4M      0 --:--:-- --:--:-- --:--:-- 75.6M
+unpack distributive
+ssh command: ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && tar -xzf Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && tar -xzf Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12'"
+run application tests
+ssh command: ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5 && perl Build.PL && ./Build && ./Build test'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5 && perl Build.PL && ./Build && ./Build test'"
+Checking prerequisites...
+  requires:
+    !  AdriverCore::AdRiverCookie is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Run 'Build installdeps' to install missing prerequisites.
+
+Created MYMETA.yml and MYMETA.json
+Creating new 'Build' script for 'Adriver-GoodsBoomerang-BannerDelivery' version 'v0.1.12'
+Building Adriver-GoodsBoomerang-BannerDelivery
+Use of uninitialized value $Test::Harness::Switches in length at /usr/local/share/perl/5.10.1/Module/Build/Base.pm line 2767.
+
+#   Failed test 'use Adriver::GoodsBoomerang::BannerDelivery;'
+#   at t/00_use.t line 5.
+#     Tried to use 'Adriver::GoodsBoomerang::BannerDelivery'.
+#     Error:  Can't locate AdriverCore/AdRiverCookie.pm in @INC (@INC contains: /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/arch ./t/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/_build/lib cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 /etc/perl /usr/local/lib/perl/5.10.1 /usr/local/share/perl/5.10.1 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+# BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+# Compilation failed in require at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+# BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+# Compilation failed in require at (eval 23) line 2.
+# BEGIN failed--compilation aborted at (eval 23) line 2.
+# Looks like you failed 1 test of 1.
+t/00_use.t ................ 
+Dubious, test returned 1 (wstat 256, 0x100)
+Failed 1/1 subtests 
+Can't locate AdriverCore/AdRiverCookie.pm in @INC (@INC contains: /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/arch ./t/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/_build/lib cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 /etc/perl /usr/local/lib/perl/5.10.1 /usr/local/share/perl/5.10.1 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+Compilation failed in require at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+Compilation failed in require at t/lib/MyTest.pm line 4.
+BEGIN failed--compilation aborted at t/lib/MyTest.pm line 4.
+Compilation failed in require at t/01_app.t line 8.
+BEGIN failed--compilation aborted at t/01_app.t line 8.
+t/01_app.t ................ 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+Can't locate AdriverCore/AdRiverCookie.pm in @INC (@INC contains: /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/arch ./t/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/_build/lib cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 /etc/perl /usr/local/lib/perl/5.10.1 /usr/local/share/perl/5.10.1 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+Compilation failed in require at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+Compilation failed in require at t/lib/MyTest.pm line 4.
+BEGIN failed--compilation aborted at t/lib/MyTest.pm line 4.
+Compilation failed in require at t/02_limits.t line 9.
+BEGIN failed--compilation aborted at t/02_limits.t line 9.
+t/02_limits.t ............. 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+Can't locate AdriverCore/AdRiverCookie.pm in @INC (@INC contains: /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/arch ./t/lib /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/_build/lib cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 ./cpanlib/lib/perl5/x86_64-linux-gnu-thread-multi ./cpanlib/lib/perl5 /etc/perl /usr/local/lib/perl/5.10.1 /usr/local/share/perl/5.10.1 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery/AdriverCookie.pm line 3.
+Compilation failed in require at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+BEGIN failed--compilation aborted at /home/melezhik/.perl_smoke_test/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12/blib/lib/Adriver/GoodsBoomerang/BannerDelivery.pm line 14.
+Compilation failed in require at t/lib/MyTest.pm line 4.
+BEGIN failed--compilation aborted at t/lib/MyTest.pm line 4.
+Compilation failed in require at t/02_params_validation.t line 8.
+BEGIN failed--compilation aborted at t/02_params_validation.t line 8.
+t/02_params_validation.t .. 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+
+Test Summary Report
+-------------------
+t/00_use.t              (Wstat: 256 Tests: 1 Failed: 1)
+  Failed test:  1
+  Non-zero exit status: 1
+t/01_app.t              (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/02_limits.t           (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/02_params_validation.t (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+Files=4, Tests=1,  0 wallclock secs ( 0.02 usr  0.00 sys +  0.21 cusr  0.03 csys =  0.26 CPU)
+Result: FAIL
+Failed 4/4 test programs. 1/1 subtests failed.
+ERROR:  (Java::Hudson::AbortException)
+sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+java.lang.reflect.Constructor.newInstance(Constructor.java:525)
+org.jruby.javasupport.JavaConstructor.newInstanceDirect(JavaConstructor.java:275)
+org.jruby.java.invokers.ConstructorInvoker.call(ConstructorInvoker.java:91)
+org.jruby.java.invokers.ConstructorInvoker.call(ConstructorInvoker.java:178)
+org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:322)
+org.jruby.runtime.callsite.CachingCallSite.callBlock(CachingCallSite.java:178)
+org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:182)
+org.jruby.java.proxies.ConcreteJavaProxy$2.call(ConcreteJavaProxy.java:47)
+org.jruby.runtime.callsite.CachingCallSite.callBlock(CachingCallSite.java:176)
+org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:182)
+org.jruby.RubyClass.newInstance(RubyClass.java:813)
+org.jruby.RubyClass$i$newInstance.call(RubyClass$i$newInstance.gen:65535)
+org.jruby.internal.runtime.methods.JavaMethod$JavaMethodZeroOrOneOrNBlock.call(JavaMethod.java:266)
+org.jruby.java.proxies.ConcreteJavaProxy$3.call(ConcreteJavaProxy.java:143)
+org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:167)
+org.jruby.ast.CallOneArgNode.interpret(CallOneArgNode.java:57)
+org.jruby.ast.FCallOneArgNode.interpret(FCallOneArgNode.java:36)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.evaluator.ASTInterpreter.INTERPRET_METHOD(ASTInterpreter.java:75)
+org.jruby.internal.runtime.methods.InterpretedMethod.call(InterpretedMethod.java:147)
+org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:292)
+org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:135)
+org.jruby.ast.CallNoArgNode.interpret(CallNoArgNode.java:63)
+org.jruby.ast.IfNode.interpret(IfNode.java:119)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.ast.BlockNode.interpret(BlockNode.java:71)
+org.jruby.ast.IfNode.interpret(IfNode.java:117)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.ast.BlockNode.interpret(BlockNode.java:71)
+org.jruby.evaluator.ASTInterpreter.INTERPRET_METHOD(ASTInterpreter.java:75)
+org.jruby.internal.runtime.methods.InterpretedMethod.call(InterpretedMethod.java:276)
+org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:352)
+org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:237)
+org.jruby.ast.CallThreeArgNode.interpret(CallThreeArgNode.java:61)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.evaluator.ASTInterpreter.INTERPRET_BLOCK(ASTInterpreter.java:112)
+org.jruby.runtime.Interpreted19Block.evalBlockBody(Interpreted19Block.java:203)
+org.jruby.runtime.Interpreted19Block.yield(Interpreted19Block.java:154)
+org.jruby.runtime.Interpreted19Block.yieldSpecific(Interpreted19Block.java:127)
+org.jruby.runtime.Block.yieldSpecific(Block.java:99)
+org.jruby.ast.ZYieldNode.interpret(ZYieldNode.java:25)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.ast.BlockNode.interpret(BlockNode.java:71)
+org.jruby.ast.RescueNode.executeBody(RescueNode.java:216)
+org.jruby.ast.RescueNode.interpretWithJavaExceptions(RescueNode.java:120)
+org.jruby.ast.RescueNode.interpret(RescueNode.java:110)
+org.jruby.ast.BeginNode.interpret(BeginNode.java:83)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.evaluator.ASTInterpreter.INTERPRET_METHOD(ASTInterpreter.java:75)
+org.jruby.internal.runtime.methods.InterpretedMethod.call(InterpretedMethod.java:212)
+org.jruby.runtime.callsite.CachingCallSite.callBlock(CachingCallSite.java:176)
+org.jruby.runtime.callsite.CachingCallSite.callIter(CachingCallSite.java:187)
+org.jruby.ast.FCallOneArgBlockNode.interpret(FCallOneArgBlockNode.java:34)
+org.jruby.ast.NewlineNode.interpret(NewlineNode.java:104)
+org.jruby.evaluator.ASTInterpreter.INTERPRET_METHOD(ASTInterpreter.java:75)
+org.jruby.internal.runtime.methods.InterpretedMethod.call(InterpretedMethod.java:120)
+org.jruby.internal.runtime.methods.InterpretedMethod.call(InterpretedMethod.java:134)
+org.jruby.javasupport.proxy.JavaProxyConstructor$2.invoke(JavaProxyConstructor.java:225)
+org.jruby.proxy.hudson.tasks.Builder$Proxy2.perform(Unknown Source)
+hudson.tasks.BuildStepMonitor$1.perform(BuildStepMonitor.java:19)
+hudson.model.AbstractBuild$AbstractBuildExecution.perform(AbstractBuild.java:814)
+hudson.model.Build$BuildExecution.build(Build.java:199)
+hudson.model.Build$BuildExecution.doRun(Build.java:160)
+hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:593)
+hudson.model.Run.execute(Run.java:1568)
+hudson.model.FreeStyleBuild.run(FreeStyleBuild.java:46)
+hudson.model.ResourceController.execute(ResourceController.java:88)
+hudson.model.Executor.run(Executor.java:237)
+
+[8mha:AAAAWB+LCAAAAAAAAABb85aBtbiIQSmjNKU4P08vOT+vOD8nVc8DzHWtSE4tKMnMz/PLL0ldFVf2c+b/lb5MDAwVRQxSaBqcITRIIQMEMIIUFgAAckCEiWAAAAA=[0mBuild step 'Run Smoke Tests on Perl Application' marked build as failure
+Finished: FAILURE

@@ -1,0 +1,66 @@
+Started by user [8mha:AAAAlh+LCAAAAAAAAABb85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAzOEgYu/dLi1CL9vNKcHACFIKlWvwAAAA==[0manonymous
+Building in workspace /home/melezhik/GitHub/perl-smoke-test-plugin/work/jobs/test/workspace
+running smoke tests on remote host: web3-tst3.webdev.x
+download distributive http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+distro_url: http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+dist_name: Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz
+dist_dir: Adriver-GoodsBoomerang-BannerDelivery-v0.1.12
+ssh command: ssh melezhik@web3-tst3.webdev.x 'rm -rf .perl_smoke_test/ && mkdir .perl_smoke_test/ && cd .perl_smoke_test/ && curl -f http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz -o Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'rm -rf .perl_smoke_test/ && mkdir .perl_smoke_test/ && cd .perl_smoke_test/ && curl -f http://buildbot.webdev.x:8080/view/boomerang-banner-delivery/job/boomerang-banner-delivery/4/artifact/build/Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz -o Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz'"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 8051k  100 8051k    0     0  55.2M      0 --:--:-- --:--:-- --:--:-- 56.5M
+unpack distributive
+ssh command: ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && tar -xzf Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && tar -xzf Adriver-GoodsBoomerang-BannerDelivery-v0.1.12.tar.gz && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12'"
+run application tests
+ssh command: ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5:/usr/local/rle/lib/perl5 && perl Build.PL && ./Build && CATALYST_DEBUG=1 ./Build test --verbose=1'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5:/usr/local/rle/lib/perl5 && perl Build.PL && ./Build && CATALYST_DEBUG=1 ./Build test --verbose=1'"
+Created MYMETA.yml and MYMETA.json
+Creating new 'Build' script for 'Adriver-GoodsBoomerang-BannerDelivery' version 'v0.1.12'
+Building Adriver-GoodsBoomerang-BannerDelivery
+Use of uninitialized value $Test::Harness::Switches in length at /usr/local/share/perl/5.10.1/Module/Build/Base.pm line 2767.
+t/00_use.t ................ 
+ok 1 - use Adriver::GoodsBoomerang::BannerDelivery;
+1..1
+ok
+t/01_app.t ................ 
+ok 1
+ok 2
+ok 3
+1..3
+ok
+t/02_limits.t ............. 
+ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+ok 10
+ok 11
+ok 12
+1..12
+ok
+t/02_params_validation.t .. 
+ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+1..9
+ok
+All tests successful.
+Files=4, Tests=25,  1 wallclock secs ( 0.02 usr  0.01 sys +  1.01 cusr  0.10 csys =  1.14 CPU)
+Result: PASS
+ssh command: ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5:/usr/local/rle/lib/perl5 && perl -c cpanlib/scripts/gb_banner_delivery.psgi	'
+$ bash -c "ssh melezhik@web3-tst3.webdev.x 'cd .perl_smoke_test/ && cd Adriver-GoodsBoomerang-BannerDelivery-v0.1.12 && export PERL5LIB=./cpanlib/lib/perl5:/usr/local/rle/lib/perl5 && perl -c cpanlib/scripts/gb_banner_delivery.psgi	'"
+cpanlib/scripts/gb_banner_delivery.psgi syntax OK
+Finished: SUCCESS
