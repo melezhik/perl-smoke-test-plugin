@@ -65,9 +65,9 @@ class PerlSmokeTestBuilder < Jenkins::Tasks::Builder
             listener.info sc.info(dist_dir, :title => 'dist_dir')
 
             if ( env['LC_ALL'].nil? || env['LC_ALL'].empty? )
-                ssh_cmd = "ssh #{@ssh_login}@#{@ssh_host}"
+                ssh_cmd = "ssh -o 'StrictHostKeyChecking no' #{@ssh_login}@#{@ssh_host}"
             else
-                ssh_cmd = "export LC_ALL=#{env['LC_ALL']} && ssh #{@ssh_login}@#{@ssh_host}"
+                ssh_cmd = "export LC_ALL=#{env['LC_ALL']} && ssh -o 'StrictHostKeyChecking no' #{@ssh_login}@#{@ssh_host}"
             end
 
             curl_verbosity = @verbose_output == true ? '--verbose' : '-s'

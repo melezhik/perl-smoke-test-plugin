@@ -18,9 +18,9 @@ run smoke tests against perl application distributive:
 ![layout](https://raw.github.com/melezhik/perl-smoke-test-plugin/master/images/layout.png "layout")
 
 
-# download link
+# last stable release
 
-[http://repo.jenkins-ci.org/snapshots/org/jenkins-ci/ruby-plugins/perl-smoke-test/](http://repo.jenkins-ci.org/snapshots/org/jenkins-ci/ruby-plugins/perl-smoke-test/)
+- [0.0.3](http://repo.jenkins-ci.org/releases/org/jenkins-ci/ruby-plugins/perl-smoke-test/0.0.3/perl-smoke-test-0.0.3.hpi)
 
 # prerequisites
 

@@ -1,7 +1,7 @@
 Jenkins::Plugin::Specification.new do |plugin|
   plugin.name = "perl-smoke-test"
   plugin.display_name = "Perl Smoke Test Plugin"
-  plugin.version = '0.0.2'
+  plugin.version = '0.0.3'
   plugin.description = 'runs smoke tests against perl application distributive on remote host'
 
   # You should create a wiki-page for your plugin when you publish it, see
